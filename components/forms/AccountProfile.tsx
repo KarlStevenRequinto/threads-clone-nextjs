@@ -11,6 +11,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UserValidation } from "@/lib/validations/user";
 import { z } from "zod";
 import Image from "next/image";
+import { updateUser } from "@/lib/actions/user.actions";
+import { usePathname, useRouter } from "next/navigation";
 interface Props {
     user: {
         id: string;
@@ -25,6 +27,9 @@ interface Props {
 const AccountProfile = ({ user, btnTitle }: Props) => {
     const [files, setFiles] = useState<File[]>([]);
     const { startUpload } = useUploadThing("media");
+    const router = useRouter();
+    const pathname = usePathname();
+
     const form = useForm({
         resolver: zodResolver(UserValidation),
         defaultValues: {
@@ -44,7 +49,21 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
                 values.profile_photo = imgRes[0].fileUrl;
             }
         }
-        console.log(values);
+
+        await updateUser({
+            userId: user.id,
+            username: values.username,
+            name: values.name,
+            bio: values.bio,
+            image: values.profile_photo,
+            path: pathname,
+        });
+
+        if (pathname === "/profile/edit") {
+            router.back();
+        } else {
+            router.push("/");
+        }
     };
 
     const handleImage = (e: ChangeEvent<HTMLInputElement>, fieldChange: (value: string) => void) => {
