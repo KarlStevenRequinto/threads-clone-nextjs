@@ -26,6 +26,7 @@ const nextConfig = {
       typescript: {
         ignoreBuildErrors: true,
       },
+      domains: ['utfs.io'],
     },
   };
   
