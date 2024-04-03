@@ -31,7 +31,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
         <section>
             <ProfileHeader
                 accountId={userInfo.id}
-                authUIserId={user.id}
+                authUserId={user.id}
                 name={userInfo.name}
                 username={userInfo.username}
                 imgUrl={userInfo.image}
